@@ -60,33 +60,6 @@ production.environment.env
 
 ```
 
-## 테스트 사용자 등록
-
-```bash
-# yarn ts-node -r tsconfig-paths/register --files src/Command/UserInsert.ts -e ts
-```
-
-## 테스트 Command
-
-```bash
-# yarn ts-node -r tsconfig-paths/register --files src/Command/TestCommand.ts -e ts
-```
-
-## 빌드 테스트
-
-```bash
-# yarn build:test
-```
-
-## 배포
-
-```bash
-# yarn deploy:dev
-
-
-# yarn deploy:prod
-```
-
 ## jsonwebtoken secret key
 
 > [jsonwebtoken secret key](https://www.grc.com/passwords.htm).
