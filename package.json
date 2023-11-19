@@ -24,8 +24,8 @@
         "npm": "please-use-yarn"
     },
     "scripts": {
-        "start:dev": "cp .config/develop.environment.env .env && nodemon --exec ts-node -r tsconfig-paths/register --files src/App.ts -e ts",
-        "start:prod": "cp .config/production.environment.env .env && nodemon --exec ts-node -r tsconfig-paths/register --files build/App.ts -e ts",
+        "start:local": "cp .config/env.local .env && nodemon --exec ts-node -r tsconfig-paths/register --files src/App.ts -e ts",
+        "start:dev": "cp .config/env.dev .env && nodemon --exec ts-node -r tsconfig-paths/register --files src/App.ts -e ts",
         "start:server": "node build/App.js",
         "clean": "rm -rf build",
         "build:compile": "npx babel src --extensions .ts --out-dir build --source-maps --env-name build",
