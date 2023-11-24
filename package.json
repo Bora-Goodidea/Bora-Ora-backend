@@ -1,5 +1,5 @@
 {
-    "name": "Bora-Ora-backend",
+    "name": "bora-ora-backend",
     "version": "1.0.0",
     "description": "",
     "keywords": [],
@@ -43,7 +43,13 @@
         "migration:show": "typeorm-ts-node-commonjs migration:show -d src/Database/AppDataSource.ts",
         "migration:run": "typeorm-ts-node-commonjs migration:run -d src/Database/AppDataSource.ts",
         "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/Database/AppDataSource.ts",
-        "migration:seed": "ts-node -r tsconfig-paths/register --files src/Database/Seeds/Master.ts -e ts"
+        "migration:seed": "ts-node -r tsconfig-paths/register --files src/Database/Seeds/Master.ts -e ts",
+        "docker:build": "docker-compose build --force-rm",
+        "docker:up": "docker-compose up -d",
+        "docker:down": "docker-compose down",
+        "docker:run": "docker-compose run -p 3030:3030 bora-ora-backend yarn start:local",
+        "docker:module": "docker-compose run bora-ora-backend rm -rf node_modules && docker-compose run bora-ora-backend yarn install",
+        "docker:shell": "docker-compose run bora-ora-backend /bin/bash"
     },
     "devDependencies": {
         "@babel/cli": "7.23.0",
