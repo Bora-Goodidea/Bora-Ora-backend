@@ -75,6 +75,45 @@ env.proud
 # yarn start:dev
 ```
 
+> Docker 환경
+
+* 개발 환경시(Ex. node module 설치) docker:shell 로 접근후에 docker 안에서 하길 추천함 docker 환경 버전과 로컬 환경 버전이 다를수 있기 떄문에 그외에는 기존과 동일.
+* run 명령어로 띄웠을경우에 최초 접근은 직접 접근해야 합니다. ( http://localhost:3000 )
+* port 를 변경 핤경우 docker-compose.yml 에서 직접 변경 하세요.
+* node 버전 변경해야 하는경우는 Dockerfile 에서 직접 수정해서 다시 빌드 해야 합니다.
+
+
+* build
+```sh
+# yarn docker:build
+```
+
+* 로컬 개발환경 시작 ( yarn start )
+```sh
+# yarn docker:run
+```
+
+* damon up
+```sh
+# yarn docker:up
+```
+
+* damon down
+```sh
+# yarn docker:down
+```
+
+* docker container 로그인
+- 도커로 개발 할경우 되로록 container 안에서 yarn install 등 사용하는걸 추천.
+```sh
+# yarn docker:shell
+```
+
+* node_module 삭제하고 다시 설치
+```sh
+# yarn docker:module
+```
+
 ## 마이그레이션 && Seeder 실행
 
 ```bash
