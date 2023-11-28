@@ -49,7 +49,8 @@
         "docker:down": "docker-compose down",
         "docker:run": "docker-compose run -p 3030:3030 bora-ora-backend yarn start:local",
         "docker:module": "docker-compose run bora-ora-backend rm -rf node_modules && docker-compose run bora-ora-backend yarn install",
-        "docker:shell": "docker-compose run bora-ora-backend /bin/bash"
+        "docker:shell": "docker-compose run bora-ora-backend /bin/bash",
+        "deploy:dev": "ssh sm@psmever.iptime.org -p42022 -t 'bash -ic \"bash ~/Workspaces/deploy/bora/bora-ora/backend-deploy.sh\"'"
     },
     "devDependencies": {
         "@babel/cli": "7.23.0",
