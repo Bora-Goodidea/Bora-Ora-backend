@@ -22,16 +22,13 @@
 </div>
 </div>
 
-### 초기 설정 참고
+> 초기 설정 참고
 
-> [Setting up Node JS, Express, Prettier, ESLint and Husky Application with Babel and Typescript: Part 1](https://dev.to/mkabumattar/setting-up-node-js-express-prettier-eslint-and-husky-application-with-babel-and-typescript-part-1-2ple).
+[Setting up Node JS, Express, Prettier, ESLint and Husky Application with Babel and Typescript: Part 1](https://dev.to/mkabumattar/setting-up-node-js-express-prettier-eslint-and-husky-application-with-babel-and-typescript-part-1-2ple).
 
-## 로컬 개발 환경
+> environment
 
 ```bash
-touch .env
-
-> .env example
 APP_NAME=${APP_NAME}
 NODE_ENV=${NODE_ENV}
 APP_ENV=${APP_ENV}
@@ -63,24 +60,29 @@ SFTP_FILE_DEST_PATH_ROOT=${SFTP_FILE_DEST_PATH_ROOT}
 SFTP_FILE_DEST_PATH=${SFTP_FILE_DEST_PATH}
 
 MEDIA_HOSTNAME=${MEDIA_HOSTNAME}
+```
 
 
-> ./.config env 파일 생성
-env.local
-env.dev
-env.proud
+> 개발 환경
+```bash
+> ./.config environment 파일 생성
+
+# cp ./config/env.sample ./config/env.local
+# cp ./config/env.sample ./config/env.development
+# cp ./config/env.sample ./config/env.production
 
 # yarn install
 
-# yarn start:dev
-```
+# yarn start:local
+````
 
 > Docker 환경
 
+```
 * 개발 환경시(Ex. node module 설치) docker:shell 로 접근후에 docker 안에서 하길 추천함 docker 환경 버전과 로컬 환경 버전이 다를수 있기 떄문에 그외에는 기존과 동일.
 * port 를 변경 핤경우 docker-compose.yml 에서 직접 변경 하세요.
 * node 버전 변경해야 하는경우는 Dockerfile 에서 직접 수정해서 다시 빌드 해야 합니다.
-
+```
 
 * build
 ```sh
@@ -92,18 +94,18 @@ env.proud
 # yarn docker:run
 ```
 
-* damon up
+* daemon up
 ```sh
 # yarn docker:up
 ```
 
-* damon down
+* daemon down
 ```sh
 # yarn docker:down
 ```
 
 * docker container 로그인
-- 도커로 개발 할경우 되로록 container 안에서 yarn install 등 사용하는걸 추천.
+- 도커로 개발 할 경우 되도록 container 안에서 yarn install 등 사용하는걸 추천.
 ```sh
 # yarn docker:shell
 ```
@@ -116,9 +118,7 @@ env.proud
 ## 마이그레이션 && Seeder 실행
 
 ```bash
-
 # yarn migration:run && yarn migration:seed
-
 ```
 
 ## jsonwebtoken secret key
