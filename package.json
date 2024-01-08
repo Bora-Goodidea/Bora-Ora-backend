@@ -10,13 +10,13 @@
         "email": "wem519@gmail.com",
         "url": "https://github.com/wem519"
     },
-    "homepage": "https://github.com/Bora-Goodidea/Bora-Ora-backend",
+    "homepage": "https://github.com/Bora-Goodidea/bora-ora-backend",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Bora-Goodidea/Bora-Ora-backend.git"
+        "url": "git+https://github.com/Bora-Goodidea/bora-ora-backend.git"
     },
     "bugs": {
-        "url": "https://github.com/Bora-Goodidea/Bora-Ora-backend/issues"
+        "url": "https://github.com/Bora-Goodidea/bora-ora-backend/issues"
     },
     "engines": {
         "node": ">=18.17.1",
