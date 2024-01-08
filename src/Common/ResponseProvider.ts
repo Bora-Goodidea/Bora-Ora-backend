@@ -37,23 +37,8 @@ export const ClientErrorResponse = (response: Response, errorMessage?: string, e
     return response.status(httpStatus.badRequest).json(errorResponse).end();
 };
 
-// 기본 성공 - 데이터 있을때
+// 성공
 export const SuccessResponse = <T>(response: Response, payload: T): Response => {
-    return response.status(httpStatus.success).json({
-        message: Messages.success.default,
-        result: payload,
-    });
-};
-
-// 기본 성공 - 데이터 없을때
-export const SuccessDefault = (response: Response): Response => {
-    return response.status(httpStatus.success).json({
-        message: Messages.success.default,
-    });
-};
-
-// 데이터만.
-export const DataSuccessResponse = <T>(response: Response, payload: T): Response => {
     return response.status(httpStatus.success).json(payload);
 };
 
@@ -61,12 +46,5 @@ export const DataSuccessResponse = <T>(response: Response, payload: T): Response
 export const AuthenticateErrorResponse = (response: Response): Response => {
     return response.status(httpStatus.unAuthorized).json({
         message: Messages.error.authenticateError,
-    });
-};
-
-// 서버 공지사항 - 데이터 없을 때
-export const BaseNoticeResponse = (response: Response): Response => {
-    return response.status(httpStatus.created).json({
-        message: Messages.error.emptyNoticeFile,
     });
 };

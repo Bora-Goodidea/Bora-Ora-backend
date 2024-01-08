@@ -48,7 +48,7 @@ export const BaseData = async (req: Request, res: Response): Promise<Response> =
         };
     });
 
-    return SuccessResponse(res, { code: { step1: resultCodeStep1, step2: resultCodeStep2 } });
+    return SuccessResponse(res, { code: { basic: resultCodeStep1, group: resultCodeStep2 } });
 };
 
 // 서버 공지사항
