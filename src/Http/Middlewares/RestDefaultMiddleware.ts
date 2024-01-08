@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ClientErrorResponse } from '@Commons/ResponseProvider';
+import { ClientErrorResponse } from '@Providers/ResponseProvider';
 import Messages from '@Commons/Messages';
 import _ from 'lodash';
 import Codes from '@Commons/Codes';

@@ -41,13 +41,14 @@ module.exports = function (api) {
         [
             'module-resolver',
             {
-                root: ['./src'],
+                root: ['./'],
                 alias: {
                     '@Commons': './src/Common',
                     '@Servers': './src/Server',
                     '@Routes': './src/Route',
-                    '@Controllers': './src/Controller',
-                    '@Middlewares': './src/Middlewares',
+                    '@Controllers': './src/Http/Controller',
+                    '@Middlewares': './src/Http/Middlewares',
+                    '@Providers': './src/Http/Providers',
                     '@Config': './src/Common/Config',
                     '@Logger': './src/Common/Logger',
                     '@Helper': './src/Common/Helper',

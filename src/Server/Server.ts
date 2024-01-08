@@ -49,6 +49,7 @@ export const checkEnvironment = (): { state: boolean; message: string } => {
 const addRouters = (app: Application): void => {
     const baseApiRoute = '/api';
     const baseWebRoute = '/web';
+
     /* apiRoute */
     app.use(`${baseApiRoute}/tests`, TestsRouter);
     app.use(`${baseApiRoute}/system`, RestDefaultMiddleware, SystemRouter);
@@ -65,9 +66,9 @@ export const initServer = (app: Application, Path: string): void => {
     });
 
     app.set('view engine', 'pug');
-    app.set('views', path.join(Path, 'Resources/view'));
+    app.set('views', path.join(Path, 'Resources/View'));
     app.set('AppRootDir', Path);
-    app.use(express.static(path.join(Path, 'Resources/public')));
+    app.use(express.static(path.join(Path, 'Resources/Public')));
 
     app.use(
         morgan(':remote-addr - :remote-user [:timestamp] ":method :url HTTP/:http-version" :status :res[content-length]', {

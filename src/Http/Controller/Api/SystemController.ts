@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { NoContentResponse, SuccessResponse, ClientErrorResponse } from '@Commons/ResponseProvider';
+import { NoContentResponse, SuccessResponse, ClientErrorResponse } from '@Providers/ResponseProvider';
 import { findAll } from '@Service/CodeService';
 import fs from 'fs';
 
