@@ -49,6 +49,8 @@ module.exports = function (api) {
                     '@Controllers': './src/Http/Controller',
                     '@Middlewares': './src/Http/Middlewares',
                     '@Providers': './src/Http/Providers',
+                    '@Repositories': './src/Http/Repositories',
+                    '@Services': './src/Http/Services',
                     '@Config': './src/Common/Config',
                     '@Logger': './src/Common/Logger',
                     '@Helper': './src/Common/Helper',

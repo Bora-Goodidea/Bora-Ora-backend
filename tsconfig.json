@@ -43,6 +43,8 @@
             "@Controllers/*": ["Http/Controller/*"],
             "@Middlewares/*": ["Http/Middlewares/*"],
             "@Providers/*": ["Http/Providers/*"],
+            "@Repositories/*": ["Http/Repositories/*"],
+            "@Services/*": ["Http/Services/*"],
             "@Config": ["Common/Config"],
             "@Logger": ["Common/Logger"],
             "@Helper": ["Common/Helper"],
