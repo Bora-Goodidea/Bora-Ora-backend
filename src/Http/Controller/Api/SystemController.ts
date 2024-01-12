@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { NoContentResponse, SuccessResponse, ClientErrorResponse } from '@Providers/ResponseProvider';
-import { GenSystemCodes, SystemNotice as SystemNoticeService } from '@Services/SystemServices';
+import { GenSystemCodes, SystemNotice as SystemNoticeService } from '@Services/SystemService';
 
 // 서버 체크
 export const CheckStatus = async (req: Request, res: Response): Promise<Response> => {

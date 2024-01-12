@@ -2,9 +2,9 @@ import express, { Application } from 'express';
 import path from 'path';
 import _ from 'lodash';
 import fs from 'fs';
-import { TestsRouter, SystemRouter } from '@Routes/Api';
+import * as API from '@Routes/Api';
+import * as WEB from '@Routes/Web';
 import { RestDefaultMiddleware } from '@Middlewares/RestDefaultMiddleware';
-import { DefaultRouter as DefaultWebRouter, AuthRouter as AuthWebRouter } from '@Routes/Web';
 import { Logger, AccessLogStream, LogDateTime } from '@Logger';
 import Config from '@Config';
 import bodyParser from 'body-parser';
@@ -50,13 +50,18 @@ const addRouters = (app: Application): void => {
     const baseApiRoute = '/api';
     const baseWebRoute = '/web';
 
+    const versionV1 = `v1`;
+
     /* apiRoute */
-    app.use(`${baseApiRoute}/tests`, TestsRouter);
-    app.use(`${baseApiRoute}/system`, RestDefaultMiddleware, SystemRouter);
+    app.use(`${baseApiRoute}/tests`, API.TestsRouter);
+    app.use(`${baseApiRoute}/system`, RestDefaultMiddleware, API.SystemRouter);
+
+    /* v1 */
+    app.use(`${baseApiRoute}/${versionV1}/user`, RestDefaultMiddleware, API.UserRouterV1);
 
     /* webRoute */
-    app.use(`${baseWebRoute}/auth`, AuthWebRouter);
-    app.use(`/`, DefaultWebRouter);
+    app.use(`${baseWebRoute}/auth`, WEB.AuthRouter);
+    app.use(`/`, WEB.DefaultRouter);
 };
 
 // 서버 초기화 설정.

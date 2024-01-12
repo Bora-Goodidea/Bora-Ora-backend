@@ -53,6 +53,10 @@ export const GenSystemCodes = async (): Promise<{
     };
 };
 
+/**
+ * 시스템 공지 사항
+ * @constructor
+ */
 export const SystemNotice = async (): Promise<boolean | string> => {
     try {
         const notice = fs.readFileSync('storage/system-notice.txt', 'utf8');
