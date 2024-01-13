@@ -1,4 +1,4 @@
-import { findAll } from '@Repositories/CodeRepository';
+import CodeRepository from '@Repositories/CodeRepository';
 import fs from 'fs';
 
 /**
@@ -21,7 +21,7 @@ export const GenSystemCodes = async (): Promise<{
         }>;
     }>;
 }> => {
-    const getCode = await findAll();
+    const getCode = await CodeRepository.findAll();
 
     const group = getCode.filter((c) => c.type === `group`);
     const code = getCode.filter((c) => c.type === `code`);
