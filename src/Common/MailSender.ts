@@ -7,6 +7,7 @@ const MailSender = {
      * 회원 가입 이메일 인증 메일 전송
      * @param ToEmail
      * @param EmailAuthCode
+     * @param Authlink
      * @constructor
      */
     SendUserRegisterEmail: ({ ToEmail, EmailAuthCode, Authlink }: { ToEmail: string; EmailAuthCode: string; Authlink: string }): void => {
