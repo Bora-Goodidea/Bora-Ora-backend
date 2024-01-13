@@ -39,6 +39,24 @@ export const generateRandomLetter = () => {
 };
 
 /**
+ * 랜덤 uid 스트링
+ * @param len
+ * @param an
+ */
+export const randomUidString = ({ len, an }: { len: number; an: `a` | `n` }): string => {
+    let str = '',
+        i = 0;
+    const min = an == 'a' ? 10 : 0;
+    const max = an == 'n' ? 10 : 62;
+
+    for (; i++ < len; ) {
+        let r = (Math.random() * (max - min) + min) << 0;
+        str += String.fromCharCode((r += r > 9 ? (r < 36 ? 55 : 61) : 48));
+    }
+    return str;
+};
+
+/**
  * mysql datetime 변환
  * @param depth
  * @param date
@@ -161,6 +179,6 @@ export const generateUUID = (): string => {
 /**
  * 랜덤 스트링
  */
-export const generateHexRandString = (): string => {
-    return crypto.randomBytes(10).toString('hex');
+export const generateHexRandString = (length: number): string => {
+    return crypto.randomBytes(length).toString('hex');
 };

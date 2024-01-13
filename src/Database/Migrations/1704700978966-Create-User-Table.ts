@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
 const tableName = `users`;
 
@@ -14,6 +14,13 @@ export class CreateUserTable1704700978966 implements MigrationInterface {
                         isPrimary: true,
                         isGenerated: true,
                         generationStrategy: 'increment',
+                    },
+                    {
+                        name: 'uid',
+                        type: 'char',
+                        length: '50',
+                        isNullable: false,
+                        isUnique: true,
                     },
                     {
                         name: 'type',
@@ -45,7 +52,18 @@ export class CreateUserTable1704700978966 implements MigrationInterface {
                         type: 'varchar',
                         length: '50',
                         isNullable: false,
-                        isUnique: true,
+                    },
+                    {
+                        name: 'gender',
+                        type: 'char',
+                        length: '6',
+                        isNullable: true,
+                    },
+                    {
+                        name: 'birthday',
+                        type: 'char',
+                        length: '8',
+                        isNullable: true,
                     },
                     {
                         name: 'status',
@@ -54,10 +72,11 @@ export class CreateUserTable1704700978966 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
-                        name: 'email_verified_at',
-                        type: 'timestamp',
-                        isNullable: true,
-                        default: null,
+                        name: 'email_verified',
+                        type: 'enum',
+                        enum: [`Y`, `N`],
+                        isNullable: false,
+                        default: `'N'`,
                     },
                     {
                         name: 'updated_at',
@@ -72,6 +91,68 @@ export class CreateUserTable1704700978966 implements MigrationInterface {
                 ],
             }),
             true,
+        );
+
+        await queryRunner.createForeignKey(
+            tableName,
+            new TableForeignKey({
+                columnNames: ['type'],
+                referencedTableName: 'codes',
+                referencedColumnNames: ['code_id'],
+                onDelete: 'SET NULL',
+                onUpdate: 'CASCADE',
+            }),
+        );
+
+        await queryRunner.createForeignKey(
+            tableName,
+            new TableForeignKey({
+                columnNames: ['level'],
+                referencedTableName: 'codes',
+                referencedColumnNames: ['code_id'],
+                onDelete: 'SET NULL',
+                onUpdate: 'CASCADE',
+            }),
+        );
+
+        await queryRunner.createForeignKey(
+            tableName,
+            new TableForeignKey({
+                columnNames: ['gender'],
+                referencedTableName: 'codes',
+                referencedColumnNames: ['code_id'],
+                onDelete: 'SET NULL',
+                onUpdate: 'CASCADE',
+            }),
+        );
+
+        await queryRunner.createForeignKey(
+            tableName,
+            new TableForeignKey({
+                columnNames: ['status'],
+                referencedTableName: 'codes',
+                referencedColumnNames: ['code_id'],
+                onDelete: 'SET NULL',
+                onUpdate: 'CASCADE',
+            }),
+        );
+
+        await queryRunner.createIndex(
+            'users',
+            new TableIndex({
+                name: 'IDX_USERS_UID',
+                columnNames: ['uid'],
+                isUnique: true,
+            }),
+        );
+
+        await queryRunner.createIndex(
+            'users',
+            new TableIndex({
+                name: 'IDX_USERS_EMAIL',
+                columnNames: ['email'],
+                isUnique: true,
+            }),
         );
     }
 

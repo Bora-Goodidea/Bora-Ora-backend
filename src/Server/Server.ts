@@ -60,7 +60,7 @@ const addRouters = (app: Application): void => {
     app.use(`${baseApiRoute}/${versionV1}/user`, RestDefaultMiddleware, API.UserRouterV1);
 
     /* webRoute */
-    app.use(`${baseWebRoute}/auth`, WEB.AuthRouter);
+    app.use(`${baseWebRoute}/${versionV1}/auth`, WEB.AuthRouter);
     app.use(`/`, WEB.DefaultRouter);
 };
 
