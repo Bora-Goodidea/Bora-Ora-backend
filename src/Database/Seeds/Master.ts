@@ -4,11 +4,18 @@ import MysqlConnect from '@Database/MysqlConnect';
 import { CodeTypeEnum } from '@Types/CommonTypes';
 import { exit } from 'node:process';
 import Codes from '@Codes';
+import fs from 'fs';
 
 console.debug(`######################################################################`);
 (async () => {
-    console.debug(`:::::::::::::::::::::::::::::Codes Start::::::::::::::::::::::::::::::`);
     const conn = await MysqlConnect.getConnection();
+    await conn.query(`SET FOREIGN_KEY_CHECKS=0;`);
+    await conn.query(`truncate table codes;`);
+    await conn.query(`truncate table regions;`);
+    await conn.query(`SET FOREIGN_KEY_CHECKS=1;`);
+
+    console.debug(`:::::::::::::::::::::::::::::Codes Start::::::::::::::::::::::::::::::`);
+
     const codeData: Array<{ type: CodeTypeEnum; group_id: string; code_id: string; name: string }> = [];
 
     lodash.forEach(Codes, (c) => {
@@ -23,10 +30,6 @@ console.debug(`#################################################################
         });
     });
 
-    await conn.query(`SET FOREIGN_KEY_CHECKS=0;`);
-    await conn.query(`truncate table codes;`);
-    await conn.query(`SET FOREIGN_KEY_CHECKS=1;`);
-
     for await (const code of codeData) {
         console.log(`group-id : ${code.group_id}\t code-id: ${code.code_id}\t name: ${code.name}`);
 
@@ -40,31 +43,36 @@ console.debug(`#################################################################
     }
     console.debug(`:::::::::::::::::::::::::::::Codes End::::::::::::::::::::::::::::::`);
 
-    // const [result] = await conn.query(`select * from media order by id asc limit 0,1`);
-    // if (lodash.isEmpty(result)) {
-    //     console.debug(`:::::::::::::::::::::::::::::Media Start::::::::::::::::::::::::::::::`);
-    //     const queries = [
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'default_profile.jpg', 'default_profile.jpg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile1.jpeg', 'profile1.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile2.jpeg', 'profile2.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile3.jpeg', 'profile3.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile4.jpeg', 'profile4.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile5.jpeg', 'profile5.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile6.jpeg', 'profile6.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile7.jpeg', 'profile7.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile8.jpeg', 'profile8.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile9.jpeg', 'profile9.jpeg', 28350, now())`,
-    //         `insert into media (type, path, filename, origin_name, size, created_at) values ('image/jpeg', '/profile', 'profile10.jpeg', 'profile10.jpeg', 28350, now())`,
-    //     ];
-    //     for (const query of queries) {
-    //         const [inertResult] = await conn.query(query);
-    //         if (!inertResult) {
-    //             console.debug('media insert error...');
-    //             exit();
-    //         }
-    //     }
-    //     console.debug(`:::::::::::::::::::::::::::::Media End::::::::::::::::::::::::::::::`);
-    // }
+    console.debug(`:::::::::::::::::::::::::::::Regions Start::::::::::::::::::::::::::::::`);
+    if (fs.existsSync('storage/regions.json')) {
+        const regionsFile = fs.readFileSync('storage/regions.json', 'utf8');
+        if (regionsFile.length > 0) {
+            const regions = JSON.parse(regionsFile);
+            for await (const region of regions) {
+                const code_id = region.code_id;
+                const code = region.code;
+                const list = region.list;
+                let count = 1;
+                for await (const l of list) {
+                    console.log(`code-id : ${code_id}\t code: ${code}${String(count).padStart(2, '0')}0\t name: ${l}`);
+                    const [result] = await conn.query(
+                        `insert into regions (code_id, code, name, created_at) values ('${code_id}', '${code}${String(count).padStart(
+                            2,
+                            '0',
+                        )}0', '${l}', now());`,
+                    );
+                    if (!result) {
+                        console.debug('regions insert error...');
+                        exit();
+                    }
+
+                    count = count + 1;
+                }
+            }
+        }
+    }
+
+    console.debug(`:::::::::::::::::::::::::::::Codes End::::::::::::::::::::::::::::::`);
 
     console.debug(`######################################################################`);
     exit();
