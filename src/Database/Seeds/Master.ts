@@ -11,8 +11,6 @@ console.debug(`#################################################################
     const conn = await MysqlConnect.getConnection();
     await conn.query(`SET FOREIGN_KEY_CHECKS=0;`);
     await conn.query(`truncate table codes;`);
-    await conn.query(`truncate table regions;`);
-    await conn.query(`SET FOREIGN_KEY_CHECKS=1;`);
 
     console.debug(`:::::::::::::::::::::::::::::Codes Start::::::::::::::::::::::::::::::`);
 
@@ -45,6 +43,8 @@ console.debug(`#################################################################
 
     console.debug(`:::::::::::::::::::::::::::::Regions Start::::::::::::::::::::::::::::::`);
     if (fs.existsSync('storage/regions.json')) {
+        await conn.query(`truncate table regions;`);
+
         const regionsFile = fs.readFileSync('storage/regions.json', 'utf8');
         if (regionsFile.length > 0) {
             const regions = JSON.parse(regionsFile);
@@ -71,6 +71,8 @@ console.debug(`#################################################################
             }
         }
     }
+
+    await conn.query(`SET FOREIGN_KEY_CHECKS=1;`);
 
     console.debug(`:::::::::::::::::::::::::::::Codes End::::::::::::::::::::::::::::::`);
 

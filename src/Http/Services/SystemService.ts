@@ -19,20 +19,20 @@ export const GenSystemData = async (): Promise<{
             group: string;
             name: string;
             codes: Array<{
-                code_id: string;
+                code: string;
                 name: string;
             }>;
         }>;
     };
     regions: {
         area: Array<{
-            code_id: string;
+            code: string;
             name: string;
         }>;
         basic: Array<{
             code: {
-                code_id: string;
-                code_name: string;
+                code: string;
+                name: string;
             };
             region: {
                 code: string;
@@ -40,7 +40,7 @@ export const GenSystemData = async (): Promise<{
             };
         }>;
         group: Array<{
-            code_id: string;
+            code: string;
             name: string;
             region: Array<{
                 code: string;
@@ -73,25 +73,26 @@ export const GenSystemData = async (): Promise<{
                 .filter((cf) => cf.group_id === g.group_id)
                 .map((cfg) => {
                     return {
-                        code_id: cfg.code_id,
+                        code: cfg.code_id,
                         name: cfg.name,
                     };
                 }),
         };
     });
 
-    const areaCode = lodash.filter(lodash.find(groupCdoes, { group: `090` })?.codes, (gc) => gc.code_id !== `090999`);
+    const areaCode = lodash.filter(lodash.find(groupCdoes, { group: `090` })?.codes, (gc) => gc.code !== `090999`);
 
     const basicRegions = lodash.map(regionsTask, (r) => ({
-        code: { code_id: `${r.r_code_id?.code_id}`, code_name: `${r.r_code_id?.name}` },
+        code: { code: `${r.r_code_id?.code_id}`, name: `${r.r_code_id?.name}` },
         region: { code: r.code, name: r.name },
     }));
+
     const groupRegions = lodash.map(areaCode, (ac) => {
         return {
-            code_id: ac.code_id,
+            code: ac.code,
             name: ac.name,
             region: lodash.map(
-                lodash.filter(regionsTask, (rt) => rt.code_id === ac.code_id),
+                lodash.filter(regionsTask, (rt) => rt.code_id === ac.code),
                 (r) => ({ code: r.code, name: r.name }),
             ),
         };
