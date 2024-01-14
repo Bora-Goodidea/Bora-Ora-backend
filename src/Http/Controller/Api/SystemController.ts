@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { NoContentResponse, SuccessResponse, ClientErrorResponse } from '@Providers/ResponseProvider';
-import { GenSystemCodes, SystemNotice as SystemNoticeService } from '@Services/SystemService';
+import { GenSystemData, SystemNotice as SystemNoticeService } from '@Services/SystemService';
 
 // 서버 체크
 export const CheckStatus = async (req: Request, res: Response): Promise<Response> => {
@@ -14,7 +14,7 @@ export const ErrorTest = async (req: Request, res: Response): Promise<Response> 
 
 // 기본 데이터
 export const BaseData = async (req: Request, res: Response): Promise<Response> => {
-    return SuccessResponse(res, { code: await GenSystemCodes() });
+    return SuccessResponse(res, await GenSystemData());
 };
 
 // 서버 공지사항
