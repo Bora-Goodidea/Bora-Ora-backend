@@ -85,6 +85,11 @@ export const UserRegisterService = async (
         status: `${Config.USER_DEFAULT_STATUS}`,
     });
 
+    await UsersRepository.createUserProfile({ user_id: task.id }); // 빈 프로필 생성
+    await UsersRepository.createUserPreferCity({ user_id: task.id }); // 선호 지역
+    await UsersRepository.createUserPreferWeekday({ user_id: task.id }); // 평일 선호 시간
+    await UsersRepository.createUserPreferWeekend({ user_id: task.id }); // 주말 선호 시간
+
     // 이메일 인증 등록
     await EmailAuthRepository.create({ user_id: task.id, authCode: emailAuthCode });
 
@@ -126,4 +131,13 @@ export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAut
         // 존재 하지 않는 코드
         return { status: false, message: Messages.exitsEmailAuthCode };
     }
+};
+
+export const UserPreferDataUpdate = async (req: Request): Promise<{ status: boolean; message?: string; prefer?: string }> => {
+    const { city } = req.body;
+    return {
+        status: true,
+        prefer: `${city}`,
+        message: ``,
+    };
 };

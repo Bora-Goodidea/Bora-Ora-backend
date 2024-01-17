@@ -1,9 +1,17 @@
 import { Users } from '@Entity/Users';
 import { EmailAuth } from '@Entity/EmailAuth';
+import { UserProfile } from '@Entity/UserProfile';
+import { UserPreferCity } from '@Entity/UserPreferCity';
+import { UserPreferWeekday } from '@Entity/UserPreferWeekday';
+import { UserPreferWeekend } from '@Entity/UserPreferWeekend';
 import AppDataSource from '@Database/AppDataSource';
 
 const usersRepository = AppDataSource.getRepository(Users);
 const emailAuthRepository = AppDataSource.getRepository(EmailAuth);
+const userProfileRepository = AppDataSource.getRepository(UserProfile);
+const userPreferCityRepository = AppDataSource.getRepository(UserPreferCity);
+const userPreferWeekdayRepository = AppDataSource.getRepository(UserPreferWeekday);
+const userPreferWeekendRepository = AppDataSource.getRepository(UserPreferWeekend);
 
 const UsersRepository = {
     /**
@@ -73,6 +81,38 @@ const UsersRepository = {
             {
                 user_id: user_id,
                 auth_code: authCode,
+            },
+            { transaction: false, data: false },
+        );
+    },
+    createUserProfile: async ({ user_id }: { user_id: number }): Promise<UserProfile> => {
+        return await userProfileRepository.save(
+            {
+                user_id: user_id,
+            },
+            { transaction: false, data: false },
+        );
+    },
+    createUserPreferCity: async ({ user_id }: { user_id: number }): Promise<UserPreferCity> => {
+        return await userPreferCityRepository.save(
+            {
+                user_id: user_id,
+            },
+            { transaction: false, data: false },
+        );
+    },
+    createUserPreferWeekday: async ({ user_id }: { user_id: number }) => {
+        return await userPreferWeekdayRepository.save(
+            {
+                user_id: user_id,
+            },
+            { transaction: false, data: false },
+        );
+    },
+    createUserPreferWeekend: async ({ user_id }: { user_id: number }) => {
+        return await userPreferWeekendRepository.save(
+            {
+                user_id: user_id,
             },
             { transaction: false, data: false },
         );

@@ -19,3 +19,4 @@ SystemRouter.get(`/notice`, SystemNotice);
 
 /* User Router */
 UserRouterV1.post(`/user-register`, UserControllerV1.UserRegister);
+UserRouterV1.post(`/user-prefer-update`, UserControllerV1.PserPreferUpdate);
