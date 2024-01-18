@@ -6,6 +6,7 @@ import Config from '@Config';
 import Messages from '@Messages';
 import lodash from 'lodash';
 import MailSender from '@Commons/MailSender';
+import bcrypt from 'bcrypt';
 
 /**
  * 사용자 등록
@@ -78,7 +79,7 @@ export const UserRegisterService = async (
         type: `${req.headers['client-type']}`,
         level: `${Config.USER_DEFAULT_LEVEL}`,
         email: email,
-        password: password,
+        password: `${bcrypt.hashSync(password, Config.BCRYPT_SALT)}`,
         name: name,
         gender: gender,
         birthday: `${birthYear.padStart(4, `0`)}${birthMonth.padStart(2, `0`)}${birthDay.padStart(2, `0`)}`,
@@ -126,6 +127,8 @@ export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAut
 
         // 인증 처리
         await EmailAuthRepository.updateVerified({ id: findTask.id });
+        await UsersRepository.emailAuthVerified({ user_id: findTask.user_id });
+
         return { status: false, message: Messages.success.default };
     } else {
         // 존재 하지 않는 코드

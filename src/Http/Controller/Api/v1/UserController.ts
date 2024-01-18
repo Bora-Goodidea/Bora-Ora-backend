@@ -13,7 +13,8 @@ export const UserRegister = async (req: Request, res: Response): Promise<Respons
     }
 };
 
-export const PserPreferUpdate = async (req: Request, res: Response): Promise<Response> => {
+// 회원 선호 데이터 처리
+export const UserPreferUpdate = async (req: Request, res: Response): Promise<Response> => {
     const task = await UserService.UserPreferDataUpdate(req);
 
     if (task.status) {

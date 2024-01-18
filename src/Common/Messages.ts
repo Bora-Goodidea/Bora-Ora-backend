@@ -20,9 +20,16 @@ const Messages = {
     success: {
         default: `정상 처리 하였습니다.`,
     },
+    user: {
+        noUser: `존재 하지 않는 사용자 입니다.`,
+        needEmailAuth: `인증이 필요한 사용자 입니다.`,
+        blockUser: `블럭상태 사용자 입니다.`,
+        notNormal: `로그인 할수 없는 사용자 입니다.`,
+    },
     exitsEmail: `사용중인 이메일 주소 입니다.`,
     exitsEmailAuthCode: `존재 하지 않은 코드 입니다.`,
     finishedEmailAuthCode: `이미 인증 완료한 코드 입니다.`,
+    passwordCompare: `비밀번호를 확인해 주세요.`,
 };
 
 export default Messages;

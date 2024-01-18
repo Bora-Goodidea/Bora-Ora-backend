@@ -5,6 +5,7 @@ import { UserPreferCity } from '@Entity/UserPreferCity';
 import { UserPreferWeekday } from '@Entity/UserPreferWeekday';
 import { UserPreferWeekend } from '@Entity/UserPreferWeekend';
 import AppDataSource from '@Database/AppDataSource';
+import { UpdateResult } from 'typeorm';
 
 const usersRepository = AppDataSource.getRepository(Users);
 const emailAuthRepository = AppDataSource.getRepository(EmailAuth);
@@ -77,45 +78,25 @@ const UsersRepository = {
      * @param authCode
      */
     emailAuthCreate: async ({ user_id, authCode }: { user_id: number; authCode: string }): Promise<EmailAuth> => {
-        return await emailAuthRepository.save(
-            {
-                user_id: user_id,
-                auth_code: authCode,
-            },
-            { transaction: false, data: false },
-        );
+        return await emailAuthRepository.save({ user_id: user_id, auth_code: authCode }, { transaction: false, data: false });
+    },
+    emailAuthVerified: async ({ user_id }: { user_id: number }): Promise<UpdateResult> => {
+        return await usersRepository.update({ id: user_id }, { status: `020020`, email_verified: `Y` });
     },
     createUserProfile: async ({ user_id }: { user_id: number }): Promise<UserProfile> => {
-        return await userProfileRepository.save(
-            {
-                user_id: user_id,
-            },
-            { transaction: false, data: false },
-        );
+        return await userProfileRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
     createUserPreferCity: async ({ user_id }: { user_id: number }): Promise<UserPreferCity> => {
-        return await userPreferCityRepository.save(
-            {
-                user_id: user_id,
-            },
-            { transaction: false, data: false },
-        );
+        return await userPreferCityRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
     createUserPreferWeekday: async ({ user_id }: { user_id: number }) => {
-        return await userPreferWeekdayRepository.save(
-            {
-                user_id: user_id,
-            },
-            { transaction: false, data: false },
-        );
+        return await userPreferWeekdayRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
     createUserPreferWeekend: async ({ user_id }: { user_id: number }) => {
-        return await userPreferWeekendRepository.save(
-            {
-                user_id: user_id,
-            },
-            { transaction: false, data: false },
-        );
+        return await userPreferWeekendRepository.save({ user_id: user_id }, { transaction: false, data: false });
+    },
+    loginInfo: async ({ email }: { email: string }): Promise<Users | null> => {
+        return await usersRepository.findOne({ where: { email: email } });
     },
 };
 

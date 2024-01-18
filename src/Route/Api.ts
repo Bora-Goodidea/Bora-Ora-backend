@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { Default, RandomString } from '@Controllers/Api/TestController';
 import { CheckStatus, BaseData, ErrorTest, SystemNotice } from '@Controllers/Api/SystemController';
+import * as AuthControllerV1 from '@Controllers/Api/v1/AuthController';
 import * as UserControllerV1 from '@Controllers/Api/v1/UserController';
 
 export const TestsRouter = Router();
 export const SystemRouter = Router();
 export const UserRouterV1 = Router();
+export const AuthRouterV1 = Router();
 
 /* 테스트 Router */
 TestsRouter.get(`/default`, Default);
@@ -19,4 +21,6 @@ SystemRouter.get(`/notice`, SystemNotice);
 
 /* User Router */
 UserRouterV1.post(`/user-register`, UserControllerV1.UserRegister);
-UserRouterV1.post(`/user-prefer-update`, UserControllerV1.PserPreferUpdate);
+UserRouterV1.post(`/user-prefer-update`, UserControllerV1.UserPreferUpdate);
+
+AuthRouterV1.post('/login', AuthControllerV1.login);

@@ -25,7 +25,7 @@ const EmailAuthRepository = {
      * @param authCode
      */
     findCode: async ({ authCode }: { authCode: string }): Promise<EmailAuth | null> => {
-        return await emailAuthRepository.findOne({ select: [`id`, `auth_code`, `email_verified`], where: { auth_code: authCode } });
+        return await emailAuthRepository.findOne({ select: [`id`, `user_id`, `auth_code`, `email_verified`], where: { auth_code: authCode } });
     },
     /**
      * 인증 처리
