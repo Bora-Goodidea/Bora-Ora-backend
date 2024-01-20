@@ -70,7 +70,7 @@ export const UserRegisterService = async (
 
     // 이메일 중복 체크
     if (await UsersRepository.emailExits({ email: email })) {
-        return { status: false, message: Messages.exitsEmail };
+        return { status: false, message: Messages.existsEmail };
     }
 
     // 등록
@@ -132,7 +132,7 @@ export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAut
         return { status: false, message: Messages.success.default };
     } else {
         // 존재 하지 않는 코드
-        return { status: false, message: Messages.exitsEmailAuthCode };
+        return { status: false, message: Messages.existsEmailAuthCode };
     }
 };
 

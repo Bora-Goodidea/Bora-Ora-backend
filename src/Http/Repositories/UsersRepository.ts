@@ -98,6 +98,9 @@ const UsersRepository = {
     loginInfo: async ({ email }: { email: string }): Promise<Users | null> => {
         return await usersRepository.findOne({ where: { email: email } });
     },
+    findUserByEmail: async ({ email }: { email: string }): Promise<Users | null> => {
+        return await usersRepository.findOne({ where: { email: email } });
+    },
 };
 
 export default UsersRepository;

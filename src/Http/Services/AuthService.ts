@@ -4,23 +4,26 @@ import Messages from '@Messages';
 import { emailValidator } from '@Helper';
 import UsersRepository from '@Repositories/UsersRepository';
 import bcrypt from 'bcrypt';
+import TokenManager from '@Commons/TokenManager';
 
-export const LoginAttempt = async (
+export const UserLoginAttempt = async (
     req: Request,
 ): Promise<{ status: boolean; message?: string; token?: { access_token: string; refesh_token: string } }> => {
     const { email, password } = req.body;
 
-    // 이메일 입력체크
+    // 이메일 체크
     if (lodash.isUndefined(email)) {
         return { status: false, message: Messages.required.email };
     }
 
     // 정상 이메일 체크
+    // 이메일 형식 체크
     if (!emailValidator(email)) {
         return { status: false, message: Messages.validator.email };
     }
 
     // 패스워드 입력체크
+    // 비밀번호 체크
     if (lodash.isUndefined(password)) {
         return { status: false, message: Messages.required.password };
     }
@@ -30,7 +33,7 @@ export const LoginAttempt = async (
 
     // 조회 되지 않는
     if (lodash.isEmpty(findUser)) {
-        return { status: false, message: Messages.user.noUser };
+        return { status: false, message: Messages.user.existsUserEmail };
     }
 
     // 인증전 사용자
@@ -51,15 +54,12 @@ export const LoginAttempt = async (
     const checkPassword = await bcrypt.compare(password, findUser.password);
     if (checkPassword) {
         // 정상 로그인
+        const loginToken = await TokenManager.generateLoginToken({
+            token: await TokenManager.generateAuthToken({ user_id: findUser.id, email: findUser.email }),
+        });
+
+        return { status: true, token: { access_token: loginToken.accessToken, refesh_token: loginToken.refreshToken } };
     } else {
         return { status: false, message: Messages.passwordCompare };
     }
-
-    return {
-        status: true,
-        token: {
-            access_token: ``,
-            refesh_token: ``,
-        },
-    };
 };

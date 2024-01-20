@@ -23,4 +23,5 @@ SystemRouter.get(`/notice`, SystemNotice);
 UserRouterV1.post(`/user-register`, UserControllerV1.UserRegister);
 UserRouterV1.post(`/user-prefer-update`, UserControllerV1.UserPreferUpdate);
 
-AuthRouterV1.post('/login', AuthControllerV1.login);
+/* Auth Router */
+AuthRouterV1.post(`/user-login`, AuthControllerV1.UserLogin);

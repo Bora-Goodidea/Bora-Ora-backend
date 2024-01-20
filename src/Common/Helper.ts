@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { CommonChangeMysqlDateInterface } from '@Types/CommonTypes';
+import Config from '@Config';
 
 /**
  * 이메일 검사
@@ -18,6 +19,17 @@ export const toMySqlDatetime = (inputDate: Date): string => {
     const date = new Date(inputDate);
     const dateWithOffest = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
     return dateWithOffest.toISOString().slice(0, 19).replace('T', ' ');
+};
+
+/**
+ * 현재 시간에서 시간 추가
+ * @param hours
+ */
+export const nowAddHours = (hours: number): Date => {
+    const date = new Date();
+    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+
+    return date;
 };
 
 /**
@@ -181,4 +193,20 @@ export const generateUUID = (): string => {
  */
 export const generateHexRandString = (length: number): string => {
     return crypto.randomBytes(length).toString('hex');
+};
+
+/**
+ * 스트링에서 숫자만 리턴
+ * @param inputString
+ */
+export const onlyNumberInString = (inputString: string) => {
+    const regex = /[^0-9]/g; // 숫자가 아닌 문자열을 선택하는 정규식
+    return inputString.replace(regex, '').length > 0 ? Number(inputString.replace(regex, '')) : 0;
+};
+
+/**
+ * 토큰 만료 시간 리턴
+ */
+export const generateAuthExpirationTime = () => {
+    return toMySqlDatetime(nowAddHours(onlyNumberInString(`${Config.REFRESH_TOKEN_EXPIRESIN}`)));
 };
