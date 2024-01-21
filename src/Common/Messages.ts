@@ -13,6 +13,7 @@ const Messages = {
         name: `네임을 입력해 주세요.`,
         gender: `성별을 입력해 주세요`,
         birthday: `생일을 입력해 주세요`,
+        refreshToken: `토큰 정보가 존재하지 않습니다.`,
     },
     validator: {
         email: `정확한 이메일을 입력해 주세요.`,
@@ -32,6 +33,10 @@ const Messages = {
     existsEmailAuthCode: `존재 하지 않은 코드 입니다.`,
     finishedEmailAuthCode: `이미 인증 완료한 코드 입니다.`,
     passwordCompare: `비밀번호를 확인해 주세요.`,
+    expiredRefreshToken: `로그인 시간이 만료 되었습니다. (001)`,
+    expiredRefreshTokenInDatabase: `로그인 시간이 만료 되었습니다. (002)`,
+    abnormalToken: `정상적인 로그인 정보가 아닙니다.`,
+    existsToken: `존재 하지 않는 로그인 정보 입니다.`,
 };
 
 export default Messages;

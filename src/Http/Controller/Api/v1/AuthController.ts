@@ -3,11 +3,29 @@ import { SuccessResponse, ClientErrorResponse } from '@Providers/ResponseProvide
 import * as AuthService from '@Services/AuthService';
 
 export const UserLogin = async (req: Request, res: Response): Promise<Response> => {
-    const task = await AuthService.UserLoginAttempt(req);
+    const { status, message, payload } = await AuthService.UserLoginAttempt(req);
 
-    if (task.status) {
-        return SuccessResponse(res, task.token);
+    if (status && payload && payload.uid && payload.token) {
+        return SuccessResponse(res, {
+            uid: payload.uid,
+            access_token: payload.token.access_token,
+            refresh_token: payload.token.refesh_token,
+        });
     } else {
-        return ClientErrorResponse(res, task.message);
+        return ClientErrorResponse(res, message);
+    }
+};
+
+export const TokenInfo = async (req: Request, res: Response): Promise<Response> => {
+    const { payload } = await AuthService.TokenInfo(req);
+    return SuccessResponse(res, payload);
+};
+
+export const TokenRefresh = async (req: Request, res: Response) => {
+    const { status, message, payload } = await AuthService.TokenRefresh(req);
+    if (status) {
+        return SuccessResponse(res, payload);
+    } else {
+        return ClientErrorResponse(res, message);
     }
 };

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { StatusTypeEnum } from '@Types/CommonTypes';
 @Entity()
 export class UserPreferCity extends BaseEntity {
@@ -17,9 +17,9 @@ export class UserPreferCity extends BaseEntity {
     @Column({ type: `enum`, nullable: false, enum: StatusTypeEnum, default: `N` })
     state: string;
 
-    @Column({ type: `timestamp`, nullable: false })
+    @UpdateDateColumn({ type: `timestamp`, nullable: false })
     updated_at: string;
 
-    @Column({ type: `timestamp`, nullable: false })
+    @CreateDateColumn({ type: `timestamp`, nullable: false })
     created_at: string;
 }

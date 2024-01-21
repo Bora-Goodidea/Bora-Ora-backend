@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import RestAuthenticateMiddleware from '@Middlewares/RestAuthenticateMiddleware';
 import { Default, RandomString } from '@Controllers/Api/TestController';
 import { CheckStatus, BaseData, ErrorTest, SystemNotice } from '@Controllers/Api/SystemController';
 import * as AuthControllerV1 from '@Controllers/Api/v1/AuthController';
@@ -25,3 +26,5 @@ UserRouterV1.post(`/user-prefer-update`, UserControllerV1.UserPreferUpdate);
 
 /* Auth Router */
 AuthRouterV1.post(`/user-login`, AuthControllerV1.UserLogin);
+AuthRouterV1.get(`/token-info`, RestAuthenticateMiddleware, AuthControllerV1.TokenInfo);
+AuthRouterV1.post(`/token-refresh`, AuthControllerV1.TokenRefresh);

@@ -1,6 +1,6 @@
 import { EmailAuth } from '@Entity/EmailAuth';
 import AppDataSource from '@Database/AppDataSource';
-import { toMySqlDatetime } from '@Helper';
+import Helper from '@Helper';
 import { UpdateResult } from 'typeorm';
 
 const emailAuthRepository = AppDataSource.getRepository(EmailAuth);
@@ -32,7 +32,7 @@ const EmailAuthRepository = {
      * @param id
      */
     updateVerified: async ({ id }: { id: number }): Promise<UpdateResult> => {
-        return emailAuthRepository.update({ id: id }, { email_verified: `Y`, email_verified_at: toMySqlDatetime(new Date()) });
+        return emailAuthRepository.update({ id: id }, { email_verified: `Y`, email_verified_at: Helper.toMySqlDatetime(new Date()) });
     },
 };
 

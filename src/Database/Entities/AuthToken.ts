@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Users } from '@Entity/Users';
 import { StatusTypeEnum } from '@Types/CommonTypes';
 
@@ -19,7 +19,10 @@ export class AuthToken extends BaseEntity {
     @Column({ type: `timestamp`, nullable: true })
     expiration_at: string;
 
-    @Column({ type: `timestamp`, nullable: false })
+    @UpdateDateColumn({ type: `timestamp`, nullable: false })
+    updated_at: Date;
+
+    @CreateDateColumn({ type: `timestamp`, nullable: false })
     created_at: Date;
 
     @OneToOne(() => Users, (User) => User.id, { cascade: true })

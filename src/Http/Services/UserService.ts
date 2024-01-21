@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { randomUidString, generateHexRandString, emailValidator } from '@Helper';
+import Helper from '@Helper';
 import UsersRepository from '@Repositories/UsersRepository';
 import EmailAuthRepository from '@Repositories/EmailAuthRepository';
 import Config from '@Config';
@@ -7,6 +7,7 @@ import Messages from '@Messages';
 import lodash from 'lodash';
 import MailSender from '@Commons/MailSender';
 import bcrypt from 'bcrypt';
+import { ServiceResultInterface } from '@Types/CommonTypes';
 
 /**
  * 사용자 등록
@@ -15,15 +16,15 @@ import bcrypt from 'bcrypt';
  */
 export const UserRegisterService = async (
     req: Request,
-): Promise<{
-    status: boolean;
-    message?: string;
-    user?: {
-        uid: string;
-        auth_code?: string;
-        auth_link?: string;
-    };
-}> => {
+): Promise<
+    ServiceResultInterface<{
+        user?: {
+            uid: string;
+            auth_code?: string;
+            auth_link?: string;
+        };
+    }>
+> => {
     const {
         email,
         password,
@@ -31,8 +32,8 @@ export const UserRegisterService = async (
         gender,
         birth: { year: birthYear, month: birthMonth, day: birthDay },
     } = req.body;
-    const uid = randomUidString({ len: 10, an: `a` });
-    const emailAuthCode = generateHexRandString(100);
+    const uid = Helper.randomUidString({ len: 10, an: `a` });
+    const emailAuthCode = Helper.generateHexRandString(100);
 
     const authLink = Config.PORT
         ? `${Config.HOSTNAME}:${Config.PORT}/web/v1/auth/email-auth/${emailAuthCode}`
@@ -44,7 +45,7 @@ export const UserRegisterService = async (
     }
 
     // 이메일 형식 체크
-    if (!emailValidator(email)) {
+    if (!Helper.emailValidator(email)) {
         return { status: false, message: Messages.validator.email };
     }
 
@@ -105,9 +106,9 @@ export const UserRegisterService = async (
 
     // 운영일경우 인증정보 삭제
     if (Config.APP_ENV === 'production') {
-        return { status: true, user: { uid: task.uid } };
+        return { status: true, payload: { user: { uid: task.uid } } };
     } else {
-        return { status: true, user: { uid: task.uid, auth_code: emailAuthCode, auth_link: authLink } };
+        return { status: true, payload: { user: { uid: task.uid, auth_code: emailAuthCode, auth_link: authLink } } };
     }
 };
 
@@ -116,7 +117,7 @@ export const UserRegisterService = async (
  * @param emailAuthCode
  * @constructor
  */
-export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAuthCode: string }): Promise<{ status: boolean; message: string }> => {
+export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAuthCode: string }): Promise<ServiceResultInterface<null>> => {
     const findTask = await EmailAuthRepository.findCode({ authCode: emailAuthCode });
 
     if (findTask) {
@@ -136,11 +137,10 @@ export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAut
     }
 };
 
-export const UserPreferDataUpdate = async (req: Request): Promise<{ status: boolean; message?: string; prefer?: string }> => {
+export const UserPreferDataUpdate = async (req: Request): Promise<ServiceResultInterface<{ prefer?: string }>> => {
     const { city } = req.body;
     return {
         status: true,
-        prefer: `${city}`,
-        message: ``,
+        payload: { prefer: `${city}` },
     };
 };

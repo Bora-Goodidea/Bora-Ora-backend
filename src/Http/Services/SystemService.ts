@@ -2,53 +2,56 @@ import CodeRepository from '@Repositories/CodeRepository';
 import RegionsRepository from '@Repositories/RegionsRepository';
 import fs from 'fs';
 import lodash from 'lodash';
+import { ServiceResultInterface } from '@Types/CommonTypes';
 
 /**
  * 공통 App Data
  * @constructor
  */
-export const GenSystemData = async (): Promise<{
-    code: {
-        basic: Array<{
-            type: string;
-            group: string;
-            code: string;
-            name: string;
-        }>;
-        group: Array<{
-            group: string;
-            name: string;
-            codes: Array<{
+export const GenSystemData = async (): Promise<
+    ServiceResultInterface<{
+        code: {
+            basic: Array<{
+                type: string;
+                group: string;
                 code: string;
                 name: string;
             }>;
-        }>;
-    };
-    regions: {
-        area: Array<{
-            code: string;
-            name: string;
-        }>;
-        basic: Array<{
-            code: {
-                code: string;
+            group: Array<{
+                group: string;
                 name: string;
-            };
-            region: {
-                code: string;
-                name: string;
-            };
-        }>;
-        group: Array<{
-            code: string;
-            name: string;
-            region: Array<{
+                codes: Array<{
+                    code: string;
+                    name: string;
+                }>;
+            }>;
+        };
+        regions: {
+            area: Array<{
                 code: string;
                 name: string;
             }>;
-        }>;
-    };
-}> => {
+            basic: Array<{
+                code: {
+                    code: string;
+                    name: string;
+                };
+                region: {
+                    code: string;
+                    name: string;
+                };
+            }>;
+            group: Array<{
+                code: string;
+                name: string;
+                region: Array<{
+                    code: string;
+                    name: string;
+                }>;
+            }>;
+        };
+    }>
+> => {
     const codesTask = await CodeRepository.findAll();
     const regionsTask = await RegionsRepository.findAll();
 
@@ -99,14 +102,17 @@ export const GenSystemData = async (): Promise<{
     });
 
     return {
-        code: {
-            basic: basicCdoes,
-            group: groupCdoes,
-        },
-        regions: {
-            area: areaCode,
-            basic: basicRegions,
-            group: groupRegions,
+        status: true,
+        payload: {
+            code: {
+                basic: basicCdoes,
+                group: groupCdoes,
+            },
+            regions: {
+                area: areaCode,
+                basic: basicRegions,
+                group: groupRegions,
+            },
         },
     };
 };

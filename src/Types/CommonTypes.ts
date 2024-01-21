@@ -65,3 +65,23 @@ export interface CommonChangeMysqlDateInterface {
     };
     sinceString: string;
 }
+
+export interface ServiceResultInterface<T> {
+    status: boolean;
+    message?: string;
+    payload?: T;
+}
+
+export interface AccessTokenInterface {
+    token: string;
+    iat: number;
+    exp: number;
+    aud: string;
+    iss: string;
+    sub: string;
+}
+export interface RefreshTokenInterface {
+    token: string;
+    iat: number;
+    exp: number;
+}

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn } from 'typeorm';
 import { StatusTypeEnum } from '@Types/CommonTypes';
 
 @Entity()
@@ -18,6 +18,6 @@ export class EmailAuth extends BaseEntity {
     @Column({ type: `timestamp`, nullable: false })
     email_verified_at: string;
 
-    @Column({ type: `timestamp`, nullable: false })
+    @CreateDateColumn({ type: `timestamp`, nullable: false })
     created_at: string;
 }

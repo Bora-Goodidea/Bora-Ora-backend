@@ -14,10 +14,22 @@ const AuthTokenRepository = {
         });
     },
     existsUserAuthToken: async ({ user_id }: { user_id: number }): Promise<AuthToken | null> => {
-        return await authTokenRepository.findOne({ select: [`id`, `token`, `status`, `expiration_at`, `created_at`], where: { user_id: user_id } });
+        return await authTokenRepository.findOne({
+            select: [`id`, `token`, `status`, `expiration_at`, `created_at`],
+            where: { user_id: user_id },
+        });
+    },
+    findToken: async ({ token }: { token: string }): Promise<AuthToken | null> => {
+        return await authTokenRepository.findOne({
+            select: [`id`, `token`, `status`, `expiration_at`, `created_at`],
+            where: { token: token },
+        });
     },
     updateAuthToken: async ({ id, token, expiration_at }: { id: number; token: string; expiration_at: string }): Promise<UpdateResult> => {
         return await authTokenRepository.update({ id: id }, { token: token, expiration_at: expiration_at });
+    },
+    refreshAuthToken: async ({ id, token }: { id: number; token: string }): Promise<UpdateResult> => {
+        return await authTokenRepository.update({ id: id }, { token: token });
     },
     creaateAuthToken: async ({ user_id, token, expiration_at }: { user_id: number; token: string; expiration_at: string }): Promise<AuthToken> => {
         return await authTokenRepository.save(
