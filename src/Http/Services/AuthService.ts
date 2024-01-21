@@ -7,6 +7,11 @@ import bcrypt from 'bcrypt';
 import TokenManager from '@Commons/TokenManager';
 import { ServiceResultInterface } from '@Types/CommonTypes';
 
+/**
+ * 로그인
+ * @param req
+ * @constructor
+ */
 export const UserLoginAttempt = async (
     req: Request,
 ): Promise<ServiceResultInterface<{ uid?: string; token?: { access_token: string; refesh_token: string } }>> => {
@@ -69,6 +74,11 @@ export const UserLoginAttempt = async (
     }
 };
 
+/**
+ * 토큰 정보
+ * @param req
+ * @constructor
+ */
 export const TokenInfo = async (req: Request): Promise<ServiceResultInterface<{ uid: string; level: string }>> => {
     const { uid, level } = req.app.locals.user;
 
@@ -81,6 +91,11 @@ export const TokenInfo = async (req: Request): Promise<ServiceResultInterface<{ 
     };
 };
 
+/**
+ * 토큰 새로 고침
+ * @param req
+ * @constructor
+ */
 export const TokenRefresh = async (req: Request): Promise<ServiceResultInterface<{ uid: string; access_token: string; refresh_token: string }>> => {
     const { refresh_token } = req.body;
 

@@ -80,24 +80,52 @@ const UsersRepository = {
     emailAuthCreate: async ({ user_id, authCode }: { user_id: number; authCode: string }): Promise<EmailAuth> => {
         return await emailAuthRepository.save({ user_id: user_id, auth_code: authCode }, { transaction: false, data: false });
     },
+    /**
+     * 이메일 인증 처리
+     * @param user_id
+     */
     emailAuthVerified: async ({ user_id }: { user_id: number }): Promise<UpdateResult> => {
         return await usersRepository.update({ id: user_id }, { status: `020020`, email_verified: `Y` });
     },
+    /**
+     * 사용자 임시 프르필 등록
+     * @param user_id
+     */
     createUserProfile: async ({ user_id }: { user_id: number }): Promise<UserProfile> => {
         return await userProfileRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
+    /**
+     * 사용자 선호 도시 등록
+     * @param user_id
+     */
     createUserPreferCity: async ({ user_id }: { user_id: number }): Promise<UserPreferCity> => {
         return await userPreferCityRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
+    /**
+     * 사용자 평일 선호 시간
+     * @param user_id
+     */
     createUserPreferWeekday: async ({ user_id }: { user_id: number }) => {
         return await userPreferWeekdayRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
+    /**
+     * 사용자 주말 선호 시간
+     * @param user_id
+     */
     createUserPreferWeekend: async ({ user_id }: { user_id: number }) => {
         return await userPreferWeekendRepository.save({ user_id: user_id }, { transaction: false, data: false });
     },
+    /**
+     * 로그인용 사용자 조회
+     * @param email
+     */
     loginInfo: async ({ email }: { email: string }): Promise<Users | null> => {
         return await usersRepository.findOne({ where: { email: email } });
     },
+    /**
+     * 이메일 사용자 조회
+     * @param email
+     */
     findUserByEmail: async ({ email }: { email: string }): Promise<Users | null> => {
         return await usersRepository.findOne({ where: { email: email } });
     },

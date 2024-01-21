@@ -9,9 +9,20 @@ import authTokenRepository from '@Repositories/AuthTokenRepository';
 import ms from 'ms';
 
 const TokenManager = {
+    /**
+     * 사용자 토큰 생성
+     * @param uid
+     * @param user_id
+     * @param email
+     * @param level
+     */
     generateLocalToken: ({ uid, user_id, email, level }: { uid: string; user_id: number; email: string; level: string }): string => {
         return Helper.encrypt(`${uid}||${user_id}||${email}||${level}`);
     },
+    /**
+     * 토큰 사용자 정보
+     * @param localToken
+     */
     verifyLocalToken: ({ localToken }: { localToken: string }): { uid: string; user_id: number; email: string; level: string } | null => {
         try {
             const tokenInfo = Helper.decrypt(localToken);
@@ -28,6 +39,13 @@ const TokenManager = {
             return null;
         }
     },
+    /**
+     * 토큰 생성
+     * @param uid
+     * @param user_id
+     * @param email
+     * @param level
+     */
     generateAuthToken: async ({ uid, user_id, email, level }: { uid: string; user_id: number; email: string; level: string }): Promise<string> => {
         const localToken = TokenManager.generateLocalToken({ uid: uid, user_id: user_id, email: email, level: level });
 
@@ -54,6 +72,14 @@ const TokenManager = {
 
         return localToken;
     },
+    /**
+     * 리프래시 토큰 생성
+     * @param uid
+     * @param user_id
+     * @param email
+     * @param level
+     * @param exp
+     */
     generateRefreshAuthToken: async ({
         uid,
         user_id,
@@ -85,6 +111,11 @@ const TokenManager = {
             refreshToken: newToken.refreshToken,
         };
     },
+    /**
+     * 로그인 토큰 생성
+     * @param token
+     * @param exp
+     */
     generateLoginToken: async ({ token, exp }: { token: string; exp?: number }): Promise<{ accessToken: string; refreshToken: string }> => {
         const signOptions = {
             issuer: 'bora-goodidea',
@@ -101,6 +132,10 @@ const TokenManager = {
             }),
         };
     },
+    /**
+     * 액세스 토큰 정보
+     * @param accessToken
+     */
     verifyAccessToken: ({
         accessToken,
     }: {
@@ -127,6 +162,10 @@ const TokenManager = {
             return null;
         }
     },
+    /**
+     * 리프래시 토큰
+     * @param refreshToken
+     */
     verifyRefreshToken: async ({
         refreshToken,
     }: {

@@ -137,6 +137,11 @@ export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAut
     }
 };
 
+/**
+ * 사용자 선호 정보 등록
+ * @param req
+ * @constructor
+ */
 export const UserPreferDataUpdate = async (req: Request): Promise<ServiceResultInterface<{ prefer?: string }>> => {
     const { city } = req.body;
     return {

@@ -1,13 +1,16 @@
+// 공통 코드
 export enum CodeTypeEnum {
     GROUP = 'group',
     CODE = 'code',
 }
 
+// typeorm 상태 enum
 export enum StatusTypeEnum {
     TRUE = 'Y',
     FALSE = 'N',
 }
 
+// 기본 사용자 정보 인터페이스
 export interface CommonUserInfoInterface {
     id?: number;
     uid: string;
@@ -66,12 +69,14 @@ export interface CommonChangeMysqlDateInterface {
     sinceString: string;
 }
 
+// service 함수 결과
 export interface ServiceResultInterface<T> {
     status: boolean;
     message?: string;
     payload?: T;
 }
 
+// 엑세스 토큰 타입
 export interface AccessTokenInterface {
     token: string;
     iat: number;
@@ -80,6 +85,8 @@ export interface AccessTokenInterface {
     iss: string;
     sub: string;
 }
+
+// 리프래시 토큰 타입
 export interface RefreshTokenInterface {
     token: string;
     iat: number;
