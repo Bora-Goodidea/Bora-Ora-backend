@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn } from 'typeorm';
 import { CodeTypeEnum } from '@Types/CommonTypes';
 
 @Entity()
@@ -18,6 +18,6 @@ export class Codes extends BaseEntity {
     @Column({ type: `varchar`, nullable: false })
     name: string;
 
-    @Column({ type: `timestamp`, nullable: false })
+    @CreateDateColumn({ type: `timestamp`, nullable: false })
     created_at: string;
 }

@@ -1,6 +1,6 @@
 import { EmailAuth } from '@Entity/EmailAuth';
 import AppDataSource from '@Database/AppDataSource';
-import { toMySqlDatetime } from '@Helper';
+import Helper from '@Helper';
 import { UpdateResult } from 'typeorm';
 
 const emailAuthRepository = AppDataSource.getRepository(EmailAuth);
@@ -25,14 +25,14 @@ const EmailAuthRepository = {
      * @param authCode
      */
     findCode: async ({ authCode }: { authCode: string }): Promise<EmailAuth | null> => {
-        return await emailAuthRepository.findOne({ select: [`id`, `auth_code`, `email_verified`], where: { auth_code: authCode } });
+        return await emailAuthRepository.findOne({ select: [`id`, `user_id`, `auth_code`, `email_verified`], where: { auth_code: authCode } });
     },
     /**
      * 인증 처리
      * @param id
      */
     updateVerified: async ({ id }: { id: number }): Promise<UpdateResult> => {
-        return emailAuthRepository.update({ id: id }, { email_verified: `Y`, email_verified_at: toMySqlDatetime(new Date()) });
+        return emailAuthRepository.update({ id: id }, { email_verified: `Y`, email_verified_at: Helper.toMySqlDatetime(new Date()) });
     },
 };
 

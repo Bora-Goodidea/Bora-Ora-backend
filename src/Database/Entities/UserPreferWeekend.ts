@@ -1,22 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { StatusTypeEnum } from '@Types/CommonTypes';
 
 @Entity()
-export class EmailAuth extends BaseEntity {
+export class UserPreferWeekend extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column({ type: `int`, nullable: false })
     user_id: number;
 
-    @Column({ type: `varchar`, nullable: false, length: 255 })
-    auth_code: string;
+    @Column({ type: `char`, nullable: true, length: 6 })
+    time: string;
 
     @Column({ type: `enum`, nullable: false, enum: StatusTypeEnum, default: `N` })
-    email_verified: string;
+    state: string;
 
-    @Column({ type: `timestamp`, nullable: false })
-    email_verified_at: string;
+    @UpdateDateColumn({ type: `timestamp`, nullable: false })
+    updated_at: string;
 
     @CreateDateColumn({ type: `timestamp`, nullable: false })
     created_at: string;

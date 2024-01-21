@@ -58,6 +58,7 @@ const addRouters = (app: Application): void => {
 
     /* v1 */
     app.use(`${baseApiRoute}/${versionV1}/user`, RestDefaultMiddleware, API.UserRouterV1);
+    app.use(`${baseApiRoute}/${versionV1}/auth`, RestDefaultMiddleware, API.AuthRouterV1);
 
     /* webRoute */
     app.use(`${baseWebRoute}/${versionV1}/auth`, WEB.AuthRouter);
@@ -87,15 +88,6 @@ export const initServer = (app: Application, Path: string): void => {
         }),
     );
 
-    app.locals.user = {
-        auth: false,
-        user_id: 0,
-        uid: '',
-        email: '',
-        status: '',
-        level: '',
-    };
-
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(
@@ -104,6 +96,14 @@ export const initServer = (app: Application, Path: string): void => {
             tempFileDir: '/tmp/',
         }),
     );
+
+    app.locals.user = {
+        localToken: ``,
+        uid: ``,
+        user_id: null,
+        email: ``,
+        level: ``,
+    };
 
     addRouters(app);
     return;

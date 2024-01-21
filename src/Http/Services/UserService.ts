@@ -1,11 +1,13 @@
 import { Request } from 'express';
-import { randomUidString, generateHexRandString, emailValidator } from '@Helper';
+import Helper from '@Helper';
 import UsersRepository from '@Repositories/UsersRepository';
 import EmailAuthRepository from '@Repositories/EmailAuthRepository';
 import Config from '@Config';
 import Messages from '@Messages';
 import lodash from 'lodash';
 import MailSender from '@Commons/MailSender';
+import bcrypt from 'bcrypt';
+import { ServiceResultInterface } from '@Types/CommonTypes';
 
 /**
  * 사용자 등록
@@ -14,15 +16,15 @@ import MailSender from '@Commons/MailSender';
  */
 export const UserRegisterService = async (
     req: Request,
-): Promise<{
-    status: boolean;
-    message?: string;
-    user?: {
-        uid: string;
-        auth_code?: string;
-        auth_link?: string;
-    };
-}> => {
+): Promise<
+    ServiceResultInterface<{
+        user?: {
+            uid: string;
+            auth_code?: string;
+            auth_link?: string;
+        };
+    }>
+> => {
     const {
         email,
         password,
@@ -30,8 +32,8 @@ export const UserRegisterService = async (
         gender,
         birth: { year: birthYear, month: birthMonth, day: birthDay },
     } = req.body;
-    const uid = randomUidString({ len: 10, an: `a` });
-    const emailAuthCode = generateHexRandString(100);
+    const uid = Helper.randomUidString({ len: 10, an: `a` });
+    const emailAuthCode = Helper.generateHexRandString(100);
 
     const authLink = Config.PORT
         ? `${Config.HOSTNAME}:${Config.PORT}/web/v1/auth/email-auth/${emailAuthCode}`
@@ -43,7 +45,7 @@ export const UserRegisterService = async (
     }
 
     // 이메일 형식 체크
-    if (!emailValidator(email)) {
+    if (!Helper.emailValidator(email)) {
         return { status: false, message: Messages.validator.email };
     }
 
@@ -69,7 +71,7 @@ export const UserRegisterService = async (
 
     // 이메일 중복 체크
     if (await UsersRepository.emailExits({ email: email })) {
-        return { status: false, message: Messages.exitsEmail };
+        return { status: false, message: Messages.existsEmail };
     }
 
     // 등록
@@ -78,12 +80,17 @@ export const UserRegisterService = async (
         type: `${req.headers['client-type']}`,
         level: `${Config.USER_DEFAULT_LEVEL}`,
         email: email,
-        password: password,
+        password: `${bcrypt.hashSync(password, Config.BCRYPT_SALT)}`,
         name: name,
         gender: gender,
         birthday: `${birthYear.padStart(4, `0`)}${birthMonth.padStart(2, `0`)}${birthDay.padStart(2, `0`)}`,
         status: `${Config.USER_DEFAULT_STATUS}`,
     });
+
+    await UsersRepository.createUserProfile({ user_id: task.id }); // 빈 프로필 생성
+    await UsersRepository.createUserPreferCity({ user_id: task.id }); // 선호 지역
+    await UsersRepository.createUserPreferWeekday({ user_id: task.id }); // 평일 선호 시간
+    await UsersRepository.createUserPreferWeekend({ user_id: task.id }); // 주말 선호 시간
 
     // 이메일 인증 등록
     await EmailAuthRepository.create({ user_id: task.id, authCode: emailAuthCode });
@@ -99,9 +106,9 @@ export const UserRegisterService = async (
 
     // 운영일경우 인증정보 삭제
     if (Config.APP_ENV === 'production') {
-        return { status: true, user: { uid: task.uid } };
+        return { status: true, payload: { user: { uid: task.uid } } };
     } else {
-        return { status: true, user: { uid: task.uid, auth_code: emailAuthCode, auth_link: authLink } };
+        return { status: true, payload: { user: { uid: task.uid, auth_code: emailAuthCode, auth_link: authLink } } };
     }
 };
 
@@ -110,7 +117,7 @@ export const UserRegisterService = async (
  * @param emailAuthCode
  * @constructor
  */
-export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAuthCode: string }): Promise<{ status: boolean; message: string }> => {
+export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAuthCode: string }): Promise<ServiceResultInterface<null>> => {
     const findTask = await EmailAuthRepository.findCode({ authCode: emailAuthCode });
 
     if (findTask) {
@@ -121,9 +128,24 @@ export const UserRegisterEmailAuthService = async ({ emailAuthCode }: { emailAut
 
         // 인증 처리
         await EmailAuthRepository.updateVerified({ id: findTask.id });
+        await UsersRepository.emailAuthVerified({ user_id: findTask.user_id });
+
         return { status: false, message: Messages.success.default };
     } else {
         // 존재 하지 않는 코드
-        return { status: false, message: Messages.exitsEmailAuthCode };
+        return { status: false, message: Messages.existsEmailAuthCode };
     }
+};
+
+/**
+ * 사용자 선호 정보 등록
+ * @param req
+ * @constructor
+ */
+export const UserPreferDataUpdate = async (req: Request): Promise<ServiceResultInterface<{ prefer?: string }>> => {
+    const { city } = req.body;
+    return {
+        status: true,
+        payload: { prefer: `${city}` },
+    };
 };
